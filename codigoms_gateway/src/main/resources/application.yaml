@@ -1,0 +1,80 @@
+spring:
+  application:
+    name: codigoms_gateway
+  cloud:
+        gateway:
+          routes:
+            - id: usuarios-route
+              uri: http://localhost:8090
+              predicates:
+                - Path=/api/usuarios/**
+
+            - id: carrito-route
+              uri: http://localhost:8083
+              predicates:
+                - Path=/api/carrito/**
+
+            - id: pedidos-route
+              uri: http://localhost:8084
+              predicates:
+                - Path=/api/pedidos/**
+
+            - id: favoritos-route
+              uri: http://localhost:8085
+              predicates:
+                - Path=/api/favoritos/**
+
+
+            - id: boleta-route
+              uri: http://localhost:8091
+              predicates:
+                - Path=/api/boletas/**
+
+            - id: wishlist-route
+              uri: http://localhost:8086
+              predicates:
+                - Path=/api/wishlist/**
+
+            - id: cupones-route
+              uri: http://localhost:8087
+              predicates:
+                  - Path=/api/cupones/**
+
+            - id: catalogo-route
+              uri: http://localhost:8082
+              predicates:
+                - Path=/api/catalogo/**
+
+            - id: categoria-route
+              uri: http://localhost:8082
+              predicates:
+                - Path=/api/categorias/**      
+              
+
+            - id: anuncios
+              uri: http://localhost:8092
+              predicates:
+                - Path=/api/anuncios/**
+
+            - id: resena-route
+              uri: http://localhost:8084
+              predicates:
+                - Path=/api/resenas/**         
+
+
+server:
+  port: 8080
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, gateway
+  endpoint:
+    gateway:
+      enabled: true
+
+logging:
+  level:
+    org.springframework.cloud.gateway: TRACE
+    org.springframework.boot.autoconfigure: DEBUG

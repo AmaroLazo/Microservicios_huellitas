@@ -1,0 +1,12 @@
+com\servicio\catalogo\model\Libro.class
+com\servicio\catalogo\service\LibroService.class
+com\servicio\catalogo\controller\LibroController.class
+com\servicio\catalogo\exception\GlobalExceptionHandler.class
+com\servicio\catalogo\repository\LibroRepository.class
+com\servicio\catalogo\CatalogApplication.class
+com\servicio\catalogo\dto\LibroRequestDTO.class
+com\servicio\catalogo\repository\CategoriaRepository.class
+com\servicio\catalogo\service\CategoriaService.class
+com\servicio\catalogo\dto\LibroResponseDTO.class
+com\servicio\catalogo\controller\CategoriaController.class
+com\servicio\catalogo\model\Categoria.class

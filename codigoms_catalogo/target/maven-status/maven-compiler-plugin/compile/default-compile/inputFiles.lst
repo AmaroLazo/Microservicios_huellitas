@@ -1,0 +1,12 @@
+C:\Users\alazo\Desktop\PruebasUnitariasFinal\codigoms_catalogo\src\main\java\com\servicio\catalogo\CatalogApplication.java
+C:\Users\alazo\Desktop\PruebasUnitariasFinal\codigoms_catalogo\src\main\java\com\servicio\catalogo\controller\CategoriaController.java
+C:\Users\alazo\Desktop\PruebasUnitariasFinal\codigoms_catalogo\src\main\java\com\servicio\catalogo\controller\LibroController.java
+C:\Users\alazo\Desktop\PruebasUnitariasFinal\codigoms_catalogo\src\main\java\com\servicio\catalogo\dto\LibroRequestDTO.java
+C:\Users\alazo\Desktop\PruebasUnitariasFinal\codigoms_catalogo\src\main\java\com\servicio\catalogo\dto\LibroResponseDTO.java
+C:\Users\alazo\Desktop\PruebasUnitariasFinal\codigoms_catalogo\src\main\java\com\servicio\catalogo\exception\GlobalExceptionHandler.java
+C:\Users\alazo\Desktop\PruebasUnitariasFinal\codigoms_catalogo\src\main\java\com\servicio\catalogo\model\Categoria.java
+C:\Users\alazo\Desktop\PruebasUnitariasFinal\codigoms_catalogo\src\main\java\com\servicio\catalogo\model\Libro.java
+C:\Users\alazo\Desktop\PruebasUnitariasFinal\codigoms_catalogo\src\main\java\com\servicio\catalogo\repository\CategoriaRepository.java
+C:\Users\alazo\Desktop\PruebasUnitariasFinal\codigoms_catalogo\src\main\java\com\servicio\catalogo\repository\LibroRepository.java
+C:\Users\alazo\Desktop\PruebasUnitariasFinal\codigoms_catalogo\src\main\java\com\servicio\catalogo\service\CategoriaService.java
+C:\Users\alazo\Desktop\PruebasUnitariasFinal\codigoms_catalogo\src\main\java\com\servicio\catalogo\service\LibroService.java

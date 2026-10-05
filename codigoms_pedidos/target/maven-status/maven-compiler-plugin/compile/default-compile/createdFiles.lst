@@ -1,0 +1,14 @@
+com\servicio\pedidos\dto\PedidoRequestDTO.class
+com\servicio\pedidos\dto\PedidoResponseDTO.class
+com\servicio\pedidos\service\PedidoService.class
+com\servicio\pedidos\client\PedidosDataInitializer.class
+com\servicio\pedidos\PedidosApplication.class
+com\servicio\pedidos\model\Pedido.class
+com\servicio\pedidos\client\CatalogoClient.class
+com\servicio\pedidos\client\UsuariosClient.class
+com\servicio\pedidos\model\Pedido$PedidoBuilder.class
+com\servicio\pedidos\dto\UsuarioDTO.class
+com\servicio\pedidos\dto\LibroDTO.class
+com\servicio\pedidos\controller\PedidoController.class
+com\servicio\pedidos\repository\PedidoRepository.class
+com\servicio\pedidos\exception\GlobalExceptionHandler.class

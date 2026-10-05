@@ -1,0 +1,16 @@
+com\servicio\carrito\client\CarritoDataInitializer.class
+com\servicio\carrito\dto\UsuarioDTO.class
+com\servicio\carrito\dto\LibroDTO.class
+com\servicio\carrito\model\ItemCarrito.class
+com\servicio\carrito\client\CatalogoClient.class
+com\servicio\carrito\repository\CarritoRepository.class
+com\servicio\carrito\client\UsuariosClient.class
+com\servicio\carrito\exception\GlobalExceptionHandler.class
+com\servicio\carrito\service\CarritoService.class
+com\servicio\carrito\repository\ItemCarritoRepository.class
+com\servicio\carrito\model\Carrito.class
+com\servicio\carrito\dto\CarritoResponseDTO.class
+com\servicio\carrito\CarritoApplication.class
+com\servicio\carrito\controller\CarritoController.class
+com\servicio\carrito\dto\ItemCarritoRequestDTO.class
+com\servicio\carrito\dto\ItemCarritoResponseDTO.class

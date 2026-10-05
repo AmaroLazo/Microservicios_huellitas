@@ -1,0 +1,16 @@
+C:\Users\alazo\Desktop\PruebasUnitariasFinal\codigoms_carrito\src\main\java\com\servicio\carrito\CarritoApplication.java
+C:\Users\alazo\Desktop\PruebasUnitariasFinal\codigoms_carrito\src\main\java\com\servicio\carrito\client\CarritoDataInitializer.java
+C:\Users\alazo\Desktop\PruebasUnitariasFinal\codigoms_carrito\src\main\java\com\servicio\carrito\client\CatalogoClient.java
+C:\Users\alazo\Desktop\PruebasUnitariasFinal\codigoms_carrito\src\main\java\com\servicio\carrito\client\UsuariosClient.java
+C:\Users\alazo\Desktop\PruebasUnitariasFinal\codigoms_carrito\src\main\java\com\servicio\carrito\controller\CarritoController.java
+C:\Users\alazo\Desktop\PruebasUnitariasFinal\codigoms_carrito\src\main\java\com\servicio\carrito\dto\CarritoResponseDTO.java
+C:\Users\alazo\Desktop\PruebasUnitariasFinal\codigoms_carrito\src\main\java\com\servicio\carrito\dto\ItemCarritoRequestDTO.java
+C:\Users\alazo\Desktop\PruebasUnitariasFinal\codigoms_carrito\src\main\java\com\servicio\carrito\dto\ItemCarritoResponseDTO.java
+C:\Users\alazo\Desktop\PruebasUnitariasFinal\codigoms_carrito\src\main\java\com\servicio\carrito\dto\LibroDTO.java
+C:\Users\alazo\Desktop\PruebasUnitariasFinal\codigoms_carrito\src\main\java\com\servicio\carrito\dto\UsuarioDTO.java
+C:\Users\alazo\Desktop\PruebasUnitariasFinal\codigoms_carrito\src\main\java\com\servicio\carrito\exception\GlobalExceptionHandler.java
+C:\Users\alazo\Desktop\PruebasUnitariasFinal\codigoms_carrito\src\main\java\com\servicio\carrito\model\Carrito.java
+C:\Users\alazo\Desktop\PruebasUnitariasFinal\codigoms_carrito\src\main\java\com\servicio\carrito\model\ItemCarrito.java
+C:\Users\alazo\Desktop\PruebasUnitariasFinal\codigoms_carrito\src\main\java\com\servicio\carrito\repository\CarritoRepository.java
+C:\Users\alazo\Desktop\PruebasUnitariasFinal\codigoms_carrito\src\main\java\com\servicio\carrito\repository\ItemCarritoRepository.java
+C:\Users\alazo\Desktop\PruebasUnitariasFinal\codigoms_carrito\src\main\java\com\servicio\carrito\service\CarritoService.java
