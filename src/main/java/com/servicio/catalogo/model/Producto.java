@@ -3,6 +3,7 @@ package com.servicio.catalogo.model;
 import java.math.BigDecimal;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -37,6 +38,12 @@ public class Producto {
     @DecimalMin("0.01")
     @Column(nullable = false, precision = 12, scale = 2)
     private BigDecimal precio;
+
+    @NotNull
+    @DecimalMin("0.0")
+    @DecimalMax("100.0")
+    @Column(nullable = false, precision = 5, scale = 2)
+    private BigDecimal porcentajeDescuento = BigDecimal.ZERO;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)

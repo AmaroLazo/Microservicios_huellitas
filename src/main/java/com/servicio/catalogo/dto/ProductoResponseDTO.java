@@ -13,12 +13,12 @@ public class ProductoResponseDTO {
     private String nombre;
     private String descripcion;
     private BigDecimal precio;
+    private BigDecimal porcentajeDescuento;
     private Long categoriaId;
     private String categoriaNombre;
     private TipoMascota tipoMascota;
     private Integer stock;
     private boolean activo;
-    // Calculado: activo && stock > 0 (HU-11 + HU-18). No se persiste.
     private boolean disponible;
     private String imagenUrl;
 }

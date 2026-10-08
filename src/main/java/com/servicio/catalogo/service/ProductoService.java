@@ -1,5 +1,7 @@
 package com.servicio.catalogo.service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -59,6 +61,9 @@ public class ProductoService {
         producto.setNombre(request.getNombre());
         producto.setDescripcion(request.getDescripcion());
         producto.setPrecio(request.getPrecio());
+        producto.setPorcentajeDescuento(
+                request.getPorcentajeDescuento() != null ? request.getPorcentajeDescuento() : BigDecimal.ZERO
+        );
         producto.setCategoria(categoria);
         producto.setTipoMascota(request.getTipoMascota());
         producto.setStock(request.getStock());
@@ -68,9 +73,9 @@ public class ProductoService {
         return toDTO(productoRepository.save(producto));
     }
 
-    // PENDIENTE (Fase 1): hoy borra físico sin restricciones. Según tu
-    // sección 5, debe migrar a: desactivar por defecto, y eliminar solo
-    // si no tiene movimientos de stock ni referencias (si las tiene -> 409).
+    // PENDIENTE (Fase 1): hoy borra físico sin restricciones. Según la
+    // sección 5 del prompt, debe migrar a: desactivar por defecto, y
+    // eliminar solo si no tiene movimientos de stock ni referencias.
     public void eliminar(Long id) {
         if (!productoRepository.existsById(id)) {
             throw new RuntimeException("Producto no encontrado con id: " + id);
@@ -85,6 +90,16 @@ public class ProductoService {
         dto.setNombre(p.getNombre());
         dto.setDescripcion(p.getDescripcion());
         dto.setPrecio(p.getPrecio());
+
+        BigDecimal descuento = p.getPorcentajeDescuento() != null ? p.getPorcentajeDescuento() : BigDecimal.ZERO;
+        dto.setPorcentajeDescuento(descuento);
+        dto.setEnOferta(descuento.compareTo(BigDecimal.ZERO) > 0);
+
+        // precioFinal = precio - (precio * descuento / 100), redondeado a 2 decimales
+        BigDecimal factor = BigDecimal.ONE.subtract(descuento.divide(BigDecimal.valueOf(100)));
+        BigDecimal precioFinal = p.getPrecio().multiply(factor).setScale(2, RoundingMode.HALF_UP);
+        dto.setPrecioFinal(precioFinal);
+
         dto.setCategoriaId(p.getCategoria().getId());
         dto.setCategoriaNombre(p.getCategoria().getNombre());
         dto.setTipoMascota(p.getTipoMascota());
