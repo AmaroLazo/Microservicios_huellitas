@@ -1,0 +1,15 @@
+com\servicio\pedidos\dto\OrderFilter.class
+com\servicio\pedidos\model\Order.class
+com\servicio\pedidos\model\ShippingAddress.class
+com\servicio\pedidos\repository\OrderRepository.class
+com\servicio\pedidos\PedidosApplication.class
+com\servicio\pedidos\model\OrderItem.class
+com\servicio\pedidos\dto\ShippingAddressDTO.class
+com\servicio\pedidos\controller\OrderController.class
+com\servicio\pedidos\dto\CreateOrderDTO.class
+com\servicio\pedidos\dto\OrderItemDTO.class
+com\servicio\pedidos\dto\OrderResponse.class
+com\servicio\pedidos\model\OrderStatus.class
+com\servicio\pedidos\dto\OrderItemResponse.class
+com\servicio\pedidos\exception\GlobalExceptionHandler.class
+com\servicio\pedidos\service\OrderService.class
