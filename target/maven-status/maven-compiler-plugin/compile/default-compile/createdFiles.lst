@@ -1,0 +1,3 @@
+com\servicio\catalogo\dto\ProductoRequestDTO.class
+com\servicio\catalogo\exception\GlobalExceptionHandler.class
+com\servicio\catalogo\CatalogApplication.class
