@@ -1,0 +1,62 @@
+spring:
+  application:
+    name: codigoms_gateway
+  cloud:
+        gateway:
+          routes:
+            - id: usuarios-route
+              uri: http://localhost:8090
+              predicates:
+                - Path=/api/usuarios/**
+
+            - id: carrito-route
+              uri: http://localhost:8083
+              predicates:
+                - Path=/api/cart/**
+
+            - id: pedidos-route
+              uri: http://localhost:8084
+              predicates:
+                - Path=/api/orders/**
+
+
+            - id: pago-route
+              uri: http://localhost:8091
+              predicates:
+                - Path=/api/payments/**
+
+
+            - id: webhook-route
+              uri: http://localhost:8091
+              predicates:
+                - Path=/api/webhook/**
+
+
+            - id: catalogo-route
+              uri: http://localhost:8082
+              predicates:
+                - Path=/api/v1/catalogo/**
+
+            - id: categoria-route
+              uri: http://localhost:8082
+              predicates:
+                - Path=/api/v1/categorias/**      
+                   
+
+
+server:
+  port: 8080
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, gateway
+  endpoint:
+    gateway:
+      enabled: true
+
+logging:
+  level:
+    org.springframework.cloud.gateway: TRACE
+    org.springframework.boot.autoconfigure: DEBUG

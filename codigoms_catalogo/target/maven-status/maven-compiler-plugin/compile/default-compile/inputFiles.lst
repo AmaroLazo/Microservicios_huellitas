@@ -1,0 +1,13 @@
+C:\Users\alazo\Downloads\DJHMHMDFX}\Microservicios_huellitas\codigoms_catalogo\src\main\java\com\servicio\catalogo\CatalogApplication.java
+C:\Users\alazo\Downloads\DJHMHMDFX}\Microservicios_huellitas\codigoms_catalogo\src\main\java\com\servicio\catalogo\controller\CategoriaController.java
+C:\Users\alazo\Downloads\DJHMHMDFX}\Microservicios_huellitas\codigoms_catalogo\src\main\java\com\servicio\catalogo\controller\ProductoController.java
+C:\Users\alazo\Downloads\DJHMHMDFX}\Microservicios_huellitas\codigoms_catalogo\src\main\java\com\servicio\catalogo\dto\ProductoRequestDTO.java
+C:\Users\alazo\Downloads\DJHMHMDFX}\Microservicios_huellitas\codigoms_catalogo\src\main\java\com\servicio\catalogo\dto\ProductoResponseDTO.java
+C:\Users\alazo\Downloads\DJHMHMDFX}\Microservicios_huellitas\codigoms_catalogo\src\main\java\com\servicio\catalogo\exception\GlobalExceptionHandler.java
+C:\Users\alazo\Downloads\DJHMHMDFX}\Microservicios_huellitas\codigoms_catalogo\src\main\java\com\servicio\catalogo\model\Categoria.java
+C:\Users\alazo\Downloads\DJHMHMDFX}\Microservicios_huellitas\codigoms_catalogo\src\main\java\com\servicio\catalogo\model\Producto.java
+C:\Users\alazo\Downloads\DJHMHMDFX}\Microservicios_huellitas\codigoms_catalogo\src\main\java\com\servicio\catalogo\model\TipoMascota.java
+C:\Users\alazo\Downloads\DJHMHMDFX}\Microservicios_huellitas\codigoms_catalogo\src\main\java\com\servicio\catalogo\repository\CategoriaRepository.java
+C:\Users\alazo\Downloads\DJHMHMDFX}\Microservicios_huellitas\codigoms_catalogo\src\main\java\com\servicio\catalogo\repository\ProductoRepository.java
+C:\Users\alazo\Downloads\DJHMHMDFX}\Microservicios_huellitas\codigoms_catalogo\src\main\java\com\servicio\catalogo\service\CategoriaService.java
+C:\Users\alazo\Downloads\DJHMHMDFX}\Microservicios_huellitas\codigoms_catalogo\src\main\java\com\servicio\catalogo\service\ProductoService.java
