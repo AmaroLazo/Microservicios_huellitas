@@ -15,6 +15,5 @@ import lombok.NoArgsConstructor;
 public class PaymentRequest {
     private Long orderId;
     private BigDecimal amount;
-    private String currency;
     private PaymentMethod method;
 }

@@ -1,6 +1,6 @@
 package com.example.codigosms_usuario.dto;
 
-import com.example.codigosms_usuario.model.Rol;
+import com.example.codigosms_usuario.model.Role;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,12 +13,11 @@ import lombok.NoArgsConstructor;
 @Builder
 public class AuthResponse {
 
-    private Long usuarioId;
+    private Long userId;
 
     private String email;
 
-    private Rol rol;
+    private Role role;
 
-    private String mensaje;
-
+    private String message;
 }

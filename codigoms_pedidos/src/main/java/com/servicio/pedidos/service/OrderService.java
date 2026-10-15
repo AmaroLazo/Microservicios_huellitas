@@ -11,7 +11,6 @@ import com.servicio.pedidos.dto.CreateOrderDTO;
 import com.servicio.pedidos.dto.OrderFilter;
 import com.servicio.pedidos.dto.OrderItemDTO;
 import com.servicio.pedidos.model.Order;
-import com.servicio.pedidos.model.OrderItem;
 import com.servicio.pedidos.model.OrderStatus;
 import com.servicio.pedidos.model.ShippingAddress;
 import com.servicio.pedidos.repository.OrderRepository;
@@ -30,15 +29,12 @@ public class OrderService {
     public Order createFromCart(CreateOrderDTO dto) {
         Order order = new Order();
         order.setUserId(dto.getUserId());
-        order.setStatus(OrderStatus.PENDIENTE);
         order.setShippingAddress(new ShippingAddress(
                 dto.getShippingAddress().getStreet(), dto.getShippingAddress().getCity()));
 
         for (OrderItemDTO i : dto.getItems()) {
-            order.addItem(new OrderItem(i.getProductId(), i.getProductName(),
-                    i.getQuantity(), i.getUnitPrice()));
+            order.addItem(i.getProductId(), i.getProductName(), i.getQuantity(), i.getUnitPrice());
         }
-        order.setTotalAmount(order.calculateTotal());
 
         Order saved = orderRepository.save(order);
         log.info("Pedido creado id={} para el usuario {}", saved.getId(), saved.getUserId());
@@ -50,8 +46,12 @@ public class OrderService {
                 .orElseThrow(() -> new RuntimeException("Pedido no encontrado: " + orderId));
     }
 
-    public List<Order> getOrdersByUser(Long userId) {
+    public List<Order> findByUserId(Long userId) {
         return orderRepository.findByUserId(userId);
+    }
+
+    public List<Order> findByStatus(OrderStatus status) {
+        return orderRepository.findByStatus(status);
     }
 
     public Page<Order> listOrders(OrderFilter filter, Pageable pageable) {
@@ -67,32 +67,59 @@ public class OrderService {
         return orderRepository.findAll(pageable);
     }
 
+    // ---- Carrito (solo pedidos PENDIENTE) ----
+
     @Transactional
-    public void confirmPayment(Long orderId) {
+    public Order addItem(Long orderId, OrderItemDTO item) {
         Order order = getOrder(orderId);
-        // Si ya no esta pendiente (por ejemplo, aviso repetido) no se hace nada
-        if (order.getStatus() == OrderStatus.PENDIENTE) {
-            order.setStatus(OrderStatus.EN_PREPARACION);
-            orderRepository.save(order);
-        }
+        order.addItem(item.getProductId(), item.getProductName(), item.getQuantity(), item.getUnitPrice());
+        return orderRepository.save(order);
     }
 
     @Transactional
-    public void changeStatus(Long orderId, OrderStatus status) {
+    public Order updateItemQuantity(Long orderId, Long productId, Integer newQty) {
         Order order = getOrder(orderId);
-        order.setStatus(status);
+        order.updateItemQuantity(productId, newQty);
+        return orderRepository.save(order);
+    }
+
+    @Transactional
+    public Order removeItem(Long orderId, Long productId) {
+        Order order = getOrder(orderId);
+        order.removeItem(productId);
+        return orderRepository.save(order);
+    }
+
+    @Transactional
+    public Order clearItems(Long orderId) {
+        Order order = getOrder(orderId);
+        order.clearItems();
+        return orderRepository.save(order);
+    }
+
+    // ---- Compra y estado ----
+
+    // Lo dispara el aviso de pago exitoso del microservicio de pagos.
+    @Transactional
+    public void confirmOrder(Long orderId) {
+        Order order = getOrder(orderId);
+        order.confirmOrder();
         orderRepository.save(order);
     }
 
     @Transactional
-    public void cancel(Long orderId) {
+    public void updateStatus(Long orderId, OrderStatus status) {
         Order order = getOrder(orderId);
-        if (order.getStatus() == OrderStatus.ENVIADO
-                || order.getStatus() == OrderStatus.ENTREGADO
-                || order.getStatus() == OrderStatus.CANCELADO) {
+        order.updateStatus(status);
+        orderRepository.save(order);
+    }
+
+    @Transactional
+    public void cancelOrder(Long orderId) {
+        Order order = getOrder(orderId);
+        if (!order.cancelOrder()) {
             throw new RuntimeException("No se puede cancelar un pedido en estado " + order.getStatus());
         }
-        order.setStatus(OrderStatus.CANCELADO);
         orderRepository.save(order);
     }
 }

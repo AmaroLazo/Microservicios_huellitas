@@ -15,8 +15,6 @@ public class PaymentDTO {
     @NotNull(message = "El metodo de pago es obligatorio")
     private PaymentMethod method;
 
-    private String currency = "CLP";
-
     @NotBlank(message = "La idempotencyKey es obligatoria")
     private String idempotencyKey;
 }

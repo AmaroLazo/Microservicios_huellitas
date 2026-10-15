@@ -3,6 +3,8 @@ package com.servicio.codigoms_pagos.model;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+import com.servicio.codigoms_pagos.dto.GatewayEvent;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -32,9 +34,6 @@ public class Payment {
     @Column(nullable = false, precision = 12, scale = 2)
     private BigDecimal amount;
 
-    @Column(nullable = false, length = 10)
-    private String currency;
-
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private PaymentMethod method;
@@ -45,20 +44,49 @@ public class Payment {
 
     private String transactionId;
 
-    private String failureReason;
-
     @Column(nullable = false, unique = true)
     private String idempotencyKey;
 
     private LocalDateTime transactionDate;
 
-    public Payment(Long orderId, BigDecimal amount, String currency, PaymentMethod method,
-            String idempotencyKey) {
+    public Payment(Long orderId, BigDecimal amount, PaymentMethod method, String idempotencyKey) {
         this.orderId = orderId;
         this.amount = amount;
-        this.currency = currency;
         this.method = method;
         this.idempotencyKey = idempotencyKey;
         this.transactionDate = LocalDateTime.now();
+    }
+
+    // ---- Comportamiento del diagrama ----
+
+    public PaymentStatus getPaymentStatus() {
+        return status;
+    }
+
+    public Boolean validateIdempotency(String key) {
+        return idempotencyKey != null && idempotencyKey.equals(key);
+    }
+
+    // Aplica el resultado que informa la pasarela (webhook).
+    public void handleGatewayResult(GatewayEvent event) {
+        this.status = event.isSuccess() ? PaymentStatus.SUCCESS : PaymentStatus.FAILED;
+    }
+
+    // Solo se puede cancelar un pago pendiente o fallido. Devuelve true si quedó cancelado.
+    public Boolean cancelPayment() {
+        if (status == PaymentStatus.PENDING || status == PaymentStatus.FAILED) {
+            this.status = PaymentStatus.CANCELLED;
+            return true;
+        }
+        return false;
+    }
+
+    // Solo se admite el reembolso total de un pago exitoso. Devuelve true si quedó reembolsado.
+    public Boolean refundPayment(BigDecimal refundAmount) {
+        if (status != PaymentStatus.SUCCESS || refundAmount == null || refundAmount.compareTo(amount) != 0) {
+            return false;
+        }
+        this.status = PaymentStatus.REFUNDED;
+        return true;
     }
 }

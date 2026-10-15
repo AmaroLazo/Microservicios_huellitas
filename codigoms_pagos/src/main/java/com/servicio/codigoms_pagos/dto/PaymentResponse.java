@@ -13,10 +13,8 @@ public class PaymentResponse {
     private Long id;
     private Long orderId;
     private BigDecimal amount;
-    private String currency;
     private PaymentMethod method;
     private PaymentStatus status;
     private String transactionId;
-    private String failureReason;
     private LocalDateTime transactionDate;
 }

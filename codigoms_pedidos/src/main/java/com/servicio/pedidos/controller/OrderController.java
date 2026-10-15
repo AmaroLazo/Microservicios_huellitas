@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.servicio.pedidos.dto.CreateOrderDTO;
 import com.servicio.pedidos.dto.OrderFilter;
+import com.servicio.pedidos.dto.OrderItemDTO;
 import com.servicio.pedidos.dto.OrderItemResponse;
 import com.servicio.pedidos.dto.OrderResponse;
 import com.servicio.pedidos.dto.ShippingAddressDTO;
@@ -48,15 +50,15 @@ public class OrderController {
     }
 
     @GetMapping("/user/{userId}")
-    public ResponseEntity<List<OrderResponse>> getMyOrders(@PathVariable Long userId) {
-        return ResponseEntity.ok(orderService.getOrdersByUser(userId).stream()
+    public ResponseEntity<List<OrderResponse>> findByUserId(@PathVariable Long userId) {
+        return ResponseEntity.ok(orderService.findByUserId(userId).stream()
                 .map(this::toResponse).toList());
     }
 
-    @PutMapping("/{id}/cancel")
-    public ResponseEntity<Void> cancelOrder(@PathVariable Long id) {
-        orderService.cancel(id);
-        return ResponseEntity.noContent().build();
+    @GetMapping("/status/{status}")
+    public ResponseEntity<List<OrderResponse>> findByStatus(@PathVariable OrderStatus status) {
+        return ResponseEntity.ok(orderService.findByStatus(status).stream()
+                .map(this::toResponse).toList());
     }
 
     @GetMapping
@@ -64,10 +66,41 @@ public class OrderController {
         return ResponseEntity.ok(orderService.listOrders(filter, pageable).map(this::toResponse));
     }
 
+    // ---- Carrito (solo pedidos PENDIENTE) ----
+
+    @PostMapping("/{id}/items")
+    public ResponseEntity<OrderResponse> addItem(@PathVariable Long id, @Valid @RequestBody OrderItemDTO item) {
+        return ResponseEntity.ok(toResponse(orderService.addItem(id, item)));
+    }
+
+    @PutMapping("/{id}/items/{productId}")
+    public ResponseEntity<OrderResponse> updateItemQuantity(@PathVariable Long id,
+            @PathVariable Long productId, @RequestParam Integer quantity) {
+        return ResponseEntity.ok(toResponse(orderService.updateItemQuantity(id, productId, quantity)));
+    }
+
+    @DeleteMapping("/{id}/items/{productId}")
+    public ResponseEntity<OrderResponse> removeItem(@PathVariable Long id, @PathVariable Long productId) {
+        return ResponseEntity.ok(toResponse(orderService.removeItem(id, productId)));
+    }
+
+    @DeleteMapping("/{id}/items")
+    public ResponseEntity<OrderResponse> clearItems(@PathVariable Long id) {
+        return ResponseEntity.ok(toResponse(orderService.clearItems(id)));
+    }
+
+    // ---- Estado ----
+
+    @PutMapping("/{id}/cancel")
+    public ResponseEntity<Void> cancelOrder(@PathVariable Long id) {
+        orderService.cancelOrder(id);
+        return ResponseEntity.noContent().build();
+    }
+
     @PutMapping("/{id}/status")
     public ResponseEntity<OrderResponse> updateStatus(@PathVariable Long id,
             @RequestParam OrderStatus status) {
-        orderService.changeStatus(id, status);
+        orderService.updateStatus(id, status);
         return ResponseEntity.ok(toResponse(orderService.getOrder(id)));
     }
 
@@ -75,9 +108,9 @@ public class OrderController {
     @PutMapping("/{id}/payment-status")
     public ResponseEntity<Void> updatePaymentStatus(@PathVariable Long id, @RequestParam String status) {
         if ("SUCCESS".equals(status)) {
-            orderService.confirmPayment(id);
+            orderService.confirmOrder(id);
         } else if ("REFUNDED".equals(status)) {
-            orderService.cancel(id);
+            orderService.cancelOrder(id);
         }
         return ResponseEntity.noContent().build();
     }
