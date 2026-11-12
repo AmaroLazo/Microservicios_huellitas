@@ -1,0 +1,54 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: codigoms-gateway
+
+  cloud:
+    gateway:
+      mvc:
+        routes:
+          - id: usuarios-route
+            uri: http://localhost:8090
+            predicates:
+              - Path=/api/users,/api/users/**
+
+          - id: catalogo-products-route
+            uri: http://localhost:8082
+            predicates:
+              - Path=/api/v1/products,/api/v1/products/**
+
+          - id: catalogo-categories-route
+            uri: http://localhost:8082
+            predicates:
+              - Path=/api/v1/categories,/api/v1/categories/**
+
+          - id: pedidos-route
+            uri: http://localhost:8084
+            predicates:
+              - Path=/api/orders,/api/orders/**
+
+          - id: pagos-route
+            uri: http://localhost:8091
+            predicates:
+              - Path=/api/payments,/api/payments/**
+
+          - id: pagos-webhook-route
+            uri: http://localhost:8091
+            predicates:
+              - Path=/api/webhooks,/api/webhooks/**
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, gateway
+
+  endpoint:
+    gateway:
+      enabled: true
+
+logging:
+  level:
+    org.springframework.cloud.gateway: INFO
