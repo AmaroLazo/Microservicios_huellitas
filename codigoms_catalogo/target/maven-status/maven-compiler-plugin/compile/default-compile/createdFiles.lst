@@ -11,10 +11,12 @@ com\servicio\product\controller\ProductController.class
 com\servicio\product\controller\CategoryController.class
 com\servicio\product\dto\ProductResponseDTO.class
 com\servicio\product\repository\CategoryRepository.class
+com\servicio\product\config\ApiAuthorizationFilter.class
 com\servicio\product\config\DataInitializer$ProductSeed.class
 com\servicio\product\model\Category.class
 com\servicio\product\config\DataInitializer.class
 com\servicio\product\repository\ProductRepository.class
+com\servicio\product\config\ApiAuthorizationFilter$Identity.class
 com\servicio\product\model\Product.class
 com\servicio\product\exception\GlobalExceptionHandler.class
 com\servicio\product\dto\ProductUpdateRequestDTO.class

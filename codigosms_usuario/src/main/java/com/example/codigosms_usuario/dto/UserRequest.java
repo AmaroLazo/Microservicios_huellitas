@@ -19,6 +19,9 @@ public class UserRequest {
     @Email
     private String email;
 
+    @Size(max = 30)
+    private String phone;
+
     // Obligatoria al registrar; se ignora al actualizar el perfil
     @Size(min = 8, message = "La contraseña debe tener al menos 8 caracteres")
     private String password;

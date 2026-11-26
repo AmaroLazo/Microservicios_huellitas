@@ -30,6 +30,18 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordResetTokenRepository tokenRepository;
+    private final DivisionesChile divisionesChile;
+
+    private Address toAddress(AddressRequest dto) {
+        divisionesChile.validarComuna(dto.getRegion().trim(), dto.getCity().trim());
+        return Address.builder()
+                .street(dto.getStreet().trim())
+                .city(dto.getCity().trim())
+                .houseNumber(dto.getHouseNumber().trim())
+                .region(dto.getRegion().trim())
+                .postalCode(dto.getPostalCode())
+                .build();
+    }
 
     private User findUser(Long id) {
         return userRepository.findById(id)
@@ -40,6 +52,7 @@ public class UserService {
     @Transactional
     public User register(RegisterRequest dto) {
         validatePassword(dto.getPassword());
+        validateRegistrationAddress(dto);
         String email = dto.getEmail().trim().toLowerCase();
         if (userRepository.existsByEmail(email)) {
             throw new IllegalArgumentException("El email ya está registrado");
@@ -47,15 +60,12 @@ public class UserService {
         User user = new User();
         user.setName(dto.getName().trim());
         user.setEmail(email);
-        user.setPhone(dto.getPhone().trim());
+        user.setPhone(dto.getPhone());
         user.setPasswordHash(dto.getPassword());
         user.setRole(Role.CUSTOMER);
         user.setActive(true);
         List<Address> addresses = new ArrayList<>();
-        addresses.add(Address.builder()
-                .street(dto.getStreet().trim())
-                .city(dto.getCity().trim())
-                .build());
+        addresses.add(toAddress(dto));
         user.setAddresses(addresses);
         return userRepository.save(user);
     }
@@ -87,6 +97,8 @@ public class UserService {
         }
         user.setName(dto.getName().trim());
         user.setEmail(email);
+        // Al editar el perfil desde el administrador, también se puede cambiar el teléfono.
+        if (dto.getPhone() != null) user.setPhone(dto.getPhone().trim());
         return userRepository.save(user);
     }
 
@@ -161,7 +173,7 @@ public class UserService {
     @Transactional
     public User addAddress(Long userId, AddressRequest dto) {
         User user = findUser(userId);
-        Address address = Address.builder().street(dto.getStreet().trim()).city(dto.getCity().trim()).build();
+        Address address = toAddress(dto);
         user.getAddresses().add(address);
         return userRepository.save(user);
     }
@@ -184,6 +196,15 @@ public class UserService {
         if (query == null || query.isBlank()) return userRepository.findAll();
         String value = query.trim();
         return userRepository.findByNameContainingIgnoreCaseOrEmailContainingIgnoreCase(value, value);
+    }
+
+    private void validateRegistrationAddress(RegisterRequest dto) {
+        if (dto.getStreet().trim().length() < 3) {
+            throw new IllegalArgumentException("La calle debe tener al menos 3 caracteres.");
+        }
+        if (!dto.getHouseNumber().trim().matches("[0-9]+[A-Za-z]?")) {
+            throw new IllegalArgumentException("Ingresa el número de casa/departamento, con una letra opcional al final (ej.: 123 o 123B).");
+        }
     }
 
     private void validatePassword(String password) {

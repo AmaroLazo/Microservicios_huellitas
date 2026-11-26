@@ -1,8 +1,10 @@
 com\servicio\pedidos\model\Order.class
 com\servicio\pedidos\model\ShippingAddress.class
+com\servicio\pedidos\config\ApiAuthorizationFilter.class
 com\servicio\pedidos\repository\OrderRepository.class
 com\servicio\pedidos\client\CatalogStockAdjustment.class
 com\servicio\pedidos\service\OrderService$1.class
+com\servicio\pedidos\config\ApiAuthorizationFilter$Identity.class
 com\servicio\pedidos\service\OrderService$ReservedStock.class
 com\servicio\pedidos\controller\OrderController.class
 com\servicio\pedidos\dto\CreateOrderDTO.class

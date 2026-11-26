@@ -40,9 +40,11 @@ public class DemoOrdersDataInitializer implements ApplicationRunner {
 
     public DemoOrdersDataInitializer(OrderRepository orderRepository,
             @Value("${users.service.url:http://localhost:8090}") String usersUrl,
-            @Value("${catalog.service.url:http://localhost:8082}") String catalogUrl) {
+            @Value("${catalog.service.url:http://localhost:8082}") String catalogUrl,
+            @Value("${HUELLITAS_INTERNAL_KEY:}") String internalKey) {
         this.orderRepository = orderRepository;
-        this.usersClient = RestClient.builder().baseUrl(usersUrl).build();
+        this.usersClient = RestClient.builder().baseUrl(usersUrl)
+                .defaultHeader("X-Huellitas-Internal", internalKey).build();
         this.catalogClient = RestClient.builder().baseUrl(catalogUrl).build();
     }
 

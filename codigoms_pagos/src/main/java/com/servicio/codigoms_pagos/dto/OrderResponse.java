@@ -10,6 +10,7 @@ import lombok.Data;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class OrderResponse {
     private Long orderId;
+    private Long userId;
     private String status;
     private BigDecimal total;
 }

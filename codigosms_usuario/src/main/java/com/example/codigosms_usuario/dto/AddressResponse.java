@@ -16,4 +16,10 @@ public class AddressResponse {
     private String street;
 
     private String city;
+
+    private String houseNumber;
+
+    private String region;
+
+    private String postalCode;
 }

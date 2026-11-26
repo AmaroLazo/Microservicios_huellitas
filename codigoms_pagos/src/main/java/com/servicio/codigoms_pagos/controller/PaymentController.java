@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -15,6 +16,7 @@ import com.servicio.codigoms_pagos.dto.PaymentResponse;
 import com.servicio.codigoms_pagos.dto.Receipt;
 import com.servicio.codigoms_pagos.model.PaymentStatus;
 import com.servicio.codigoms_pagos.service.PaymentService;
+import com.servicio.codigoms_pagos.config.ApiAuthorizationFilter;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -25,9 +27,12 @@ import lombok.RequiredArgsConstructor;
 public class PaymentController {
 
     private final PaymentService paymentService;
+    private final ApiAuthorizationFilter authorization;
 
     @PostMapping
-    public ResponseEntity<PaymentResponse> processPayment(@Valid @RequestBody PaymentDTO dto) {
+    public ResponseEntity<PaymentResponse> processPayment(@Valid @RequestBody PaymentDTO dto,
+            @RequestAttribute("huellitasUserId") Long userId) {
+        if (!authorization.ownsOrder(dto.getOrderId(), userId)) return ResponseEntity.status(403).build();
         return ResponseEntity.status(201).body(paymentService.processPayment(dto));
     }
 

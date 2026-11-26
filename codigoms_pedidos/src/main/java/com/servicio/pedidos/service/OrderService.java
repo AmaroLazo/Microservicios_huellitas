@@ -48,7 +48,9 @@ public class OrderService {
         Order order = new Order();
         order.setUserId(dto.getUserId());
         order.setShippingAddress(new ShippingAddress(
-                dto.getShippingAddress().getStreet().trim(), dto.getShippingAddress().getCity().trim()));
+                dto.getShippingAddress().getStreet().trim(), dto.getShippingAddress().getCity().trim(),
+                dto.getShippingAddress().getHouseNumber(), dto.getShippingAddress().getRegion(),
+                dto.getShippingAddress().getPostalCode()));
         for (int i = 0; i < dto.getItems().size(); i++) {
             OrderItemDTO requested = dto.getItems().get(i);
             CatalogProductResponse product = products.get(i);

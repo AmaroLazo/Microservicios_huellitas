@@ -28,4 +28,13 @@ public class Address {
 
     @Column(nullable = false, length = 50)
     private String city;
+
+    @Column(length = 20)
+    private String houseNumber;
+
+    @Column(length = 100)
+    private String region;
+
+    @Column(length = 7)
+    private String postalCode;
 }

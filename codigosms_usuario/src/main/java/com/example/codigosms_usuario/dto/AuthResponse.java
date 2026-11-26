@@ -20,4 +20,6 @@ public class AuthResponse {
     private Role role;
 
     private String message;
+
+    private String accessToken;
 }

@@ -2,13 +2,16 @@ package com.example.codigosms_usuario.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.NoArgsConstructor;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
-public class RegisterRequest {
+public class RegisterRequest extends AddressRequest {
     @NotBlank(message = "El nombre completo es obligatorio")
     @Size(max = 100)
     private String name;
@@ -22,14 +25,6 @@ public class RegisterRequest {
     private String password;
 
     @NotBlank(message = "El teléfono es obligatorio")
-    @Size(min = 8, max = 30)
+    @Pattern(regexp = "\\+569[0-9]{8}", message = "El teléfono debe tener el prefijo +569 seguido de 8 dígitos")
     private String phone;
-
-    @NotBlank(message = "La calle y número son obligatorios")
-    @Size(max = 100)
-    private String street;
-
-    @NotBlank(message = "La ciudad o comuna es obligatoria")
-    @Size(max = 50)
-    private String city;
 }

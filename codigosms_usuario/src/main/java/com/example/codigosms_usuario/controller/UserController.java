@@ -3,6 +3,7 @@ package com.example.codigosms_usuario.controller;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.CacheControl;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.codigosms_usuario.dto.AddressRequest;
@@ -26,6 +28,8 @@ import com.example.codigosms_usuario.dto.UserResponse;
 import com.example.codigosms_usuario.model.Role;
 import com.example.codigosms_usuario.model.User;
 import com.example.codigosms_usuario.service.UserService;
+import com.example.codigosms_usuario.service.DivisionesChile;
+import com.example.codigosms_usuario.config.JwtService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -36,6 +40,8 @@ import lombok.RequiredArgsConstructor;
 public class UserController {
 
     private final UserService service;
+    private final JwtService jwt;
+    private final DivisionesChile divisionesChile;
 
     private UserResponse toResponse(User u) {
         return UserResponse.builder()
@@ -51,6 +57,9 @@ public class UserController {
                                 .id(a.getId())
                                 .street(a.getStreet())
                                 .city(a.getCity())
+                                .houseNumber(a.getHouseNumber())
+                                .region(a.getRegion())
+                                .postalCode(a.getPostalCode())
                                 .build())
                         .toList())
                 .build();
@@ -63,12 +72,24 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest dto) {
-        return ResponseEntity.ok(service.login(dto.getEmail(), dto.getPassword()));
+        AuthResponse session = service.login(dto.getEmail(), dto.getPassword());
+        session.setAccessToken(jwt.issue(session.getUserId(), session.getRole()));
+        return ResponseEntity.ok().cacheControl(CacheControl.noStore()).body(session);
+    }
+
+    @GetMapping("/regiones")
+    public List<DivisionesChile.Region> regiones() {
+        return divisionesChile.listarRegiones();
+    }
+
+    @GetMapping("/session")
+    public ResponseEntity<JwtService.Identity> session(@RequestAttribute("huellitasIdentity") JwtService.Identity identity) {
+        return ResponseEntity.ok().cacheControl(CacheControl.noStore()).body(identity);
     }
 
     @PostMapping("/logout")
     public ResponseEntity<Void> logout() {
-        // Sin sesiones ni tokens JWT no hay nada que invalidar en el servidor
+        // El cliente elimina el token al cerrar sesión.
         return ResponseEntity.noContent().build();
     }
 

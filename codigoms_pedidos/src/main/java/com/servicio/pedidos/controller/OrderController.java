@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.servicio.pedidos.dto.CreateOrderDTO;
@@ -36,7 +37,9 @@ public class OrderController {
     private final OrderService orderService;
 
     @PostMapping
-    public ResponseEntity<OrderResponse> createOrder(@Valid @RequestBody CreateOrderDTO dto) {
+    public ResponseEntity<OrderResponse> createOrder(@Valid @RequestBody CreateOrderDTO dto,
+            @RequestAttribute("huellitasUserId") Long userId) {
+        if (!userId.equals(dto.getUserId())) return ResponseEntity.status(403).build();
         return ResponseEntity.status(201).body(toResponse(orderService.createFromCart(dto)));
     }
 
@@ -128,6 +131,9 @@ public class OrderController {
             ShippingAddressDTO a = new ShippingAddressDTO();
             a.setStreet(o.getShippingAddress().getStreet());
             a.setCity(o.getShippingAddress().getCity());
+            a.setHouseNumber(o.getShippingAddress().getHouseNumber());
+            a.setRegion(o.getShippingAddress().getRegion());
+            a.setPostalCode(o.getShippingAddress().getPostalCode());
             dto.setShippingAddress(a);
         }
 
