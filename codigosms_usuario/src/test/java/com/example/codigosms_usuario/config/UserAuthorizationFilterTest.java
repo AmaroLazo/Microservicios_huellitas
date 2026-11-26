@@ -47,6 +47,16 @@ class UserAuthorizationFilterTest {
     }
 
     @Test
+    void onlyAdminCanSaveAllFieldsOfAUser() throws Exception {
+        String path = "/api/users/10/administracion";
+        account = User.builder().active(true).role(Role.CUSTOMER).build();
+        check("PUT", path, jwt.issue(10, Role.CUSTOMER), 403);
+
+        account.setRole(Role.ADMIN);
+        check("PUT", path, jwt.issue(10, Role.ADMIN), 200);
+    }
+
+    @Test
     void invalidSignatureIsRejected() throws Exception {
         String token = jwt.issue(10, Role.ADMIN);
         int signature = token.lastIndexOf('.') + 1;
@@ -58,7 +68,11 @@ class UserAuthorizationFilterTest {
     }
 
     private void check(String path, String token, int status) throws Exception {
-        var request = new MockHttpServletRequest("GET", path);
+        check("GET", path, token, status);
+    }
+
+    private void check(String method, String path, String token, int status) throws Exception {
+        var request = new MockHttpServletRequest(method, path);
         request.setServletPath(path);
         request.addHeader("Authorization", "Bearer " + token);
         var response = new MockHttpServletResponse();

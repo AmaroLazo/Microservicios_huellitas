@@ -1,6 +1,7 @@
 package com.servicio.pedidos.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,6 +13,8 @@ import com.servicio.pedidos.model.OrderStatus;
 public interface OrderRepository extends JpaRepository<Order, Long> {
 
     boolean existsBySeedKey(String seedKey);
+
+    Optional<Order> findByCreationKey(String creationKey);
 
     List<Order> findByUserId(Long userId);
 

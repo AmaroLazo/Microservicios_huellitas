@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.codigosms_usuario.dto.AddressRequest;
+import com.example.codigosms_usuario.dto.AdminUserRequest;
 import com.example.codigosms_usuario.dto.AuthResponse;
 import com.example.codigosms_usuario.dto.UserRequest;
 import com.example.codigosms_usuario.dto.RegisterRequest;
@@ -99,6 +100,17 @@ public class UserService {
         user.setEmail(email);
         // Al editar el perfil desde el administrador, también se puede cambiar el teléfono.
         if (dto.getPhone() != null) user.setPhone(dto.getPhone().trim());
+        return userRepository.save(user);
+    }
+
+    @Transactional
+    public User updateFromAdmin(Long id, long adminId, AdminUserRequest dto) {
+        if (id == adminId && (dto.getRole() != Role.ADMIN || !Boolean.TRUE.equals(dto.getActive()))) {
+            throw new IllegalArgumentException("No puedes quitarte el rol ADMIN ni desactivar tu cuenta.");
+        }
+        User user = updateProfile(id, dto);
+        user.setRole(dto.getRole());
+        user.setActive(dto.getActive());
         return userRepository.save(user);
     }
 

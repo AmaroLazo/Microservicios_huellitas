@@ -113,6 +113,7 @@ public class ApiAuthorizationFilter extends OncePerRequestFilter {
         if (method.equals("POST") && path.equals("/api/orders")) return !identity.isAdmin();
         if (identity.isAdmin()) return true;
         if (method.equals("GET") && path.equals("/api/orders/user/" + identity.userId())) return true;
+        if (method.equals("GET") && path.matches("/api/orders/intentos/[0-9a-f-]{36}")) return true;
         if (!method.equals("GET") || !path.matches("/api/orders/[0-9]+")) return false;
         long orderId = Long.parseLong(path.substring("/api/orders/".length()));
         return orders.findById(orderId).filter(order -> Long.valueOf(identity.userId()).equals(order.getUserId())).isPresent();

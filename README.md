@@ -38,6 +38,7 @@ En la copia completa del proyecto, el lanzador lee el `.env` que está **junto a
 | `SPRING_DATASOURCE_USERNAME` y `SPRING_DATASOURCE_PASSWORD` | Credenciales de MySQL. La contraseña puede quedar vacía si la cuenta local está configurada así. |
 | `HUELLITAS_JWT_SECRET` | Clave de firma de Usuarios. Debe contener al menos 32 bytes codificados en Base64. |
 | `HUELLITAS_INTERNAL_KEY` | Clave compartida por Usuarios, Catálogo, Pedidos y Pagos para llamadas internas. |
+| `HUELLITAS_ADMIN_EMAIL` y `HUELLITAS_ADMIN_PASSWORD` | Credenciales para crear el primer administrador. El correo predeterminado es `admin@huellitas.test`. El lanzador genera y guarda una contraseña en el `.env` local si no la configuraste. |
 | `HUELLITAS_DB_USUARIOS_URL`, `HUELLITAS_DB_CATALOGO_URL`, `HUELLITAS_DB_PEDIDOS_URL`, `HUELLITAS_DB_PAGOS_URL` | URLs JDBC opcionales. Si quedan vacías, se usan las bases locales de la tabla anterior. |
 | `HUELLITAS_USERS_URL`, `USERS_SERVICE_URL`, `CATALOG_SERVICE_URL`, `ORDERS_SERVICE_URL` | URLs internas. Los valores predeterminados corresponden a los puertos de la tabla. |
 
@@ -53,9 +54,9 @@ Con MySQL encendido, ejecuta desde la raíz del proyecto completo:
 
 El lanzador inicia **Usuarios → Catálogo → Pedidos → Pagos → Gateway**, espera la disponibilidad de cada uno y muestra la carpeta de logs. Para detenerlos, ejecuta `detener-huellitas.bat`. Ambos accesos llaman a sus respectivos scripts de PowerShell.
 
-Si clonaste únicamente este repositorio, arranca cada módulo con `mvn spring-boot:run` desde su carpeta, en terminales separadas y en el mismo orden. Configura las variables de entorno en esas terminales antes de iniciar. Spring Boot lee las variables del proceso. Para sobrescribir la conexión de un módulo al arrancarlo manualmente, configura `SPRING_DATASOURCE_URL` en su terminal.
+Si clonaste únicamente este repositorio, arranca cada módulo con `mvn clean spring-boot:run` desde su carpeta, en terminales separadas y en el mismo orden. Configura las variables de entorno en esas terminales antes de iniciar. Para el primer arranque de Usuarios en una base sin administrador, configura `HUELLITAS_ADMIN_PASSWORD` con al menos ocho caracteres. Para sobrescribir la conexión de un módulo al arrancarlo manualmente, configura `SPRING_DATASOURCE_URL` en su terminal.
 
-Usuarios y Pedidos tienen `app.seed.demo.enabled=true` en sus configuraciones locales. Pedidos necesita que Usuarios y Catálogo hayan terminado de iniciar para preparar sus datos de demostración.
+El arranque solo crea la cuenta de administrador si todavía no hay una cuenta con rol `ADMIN`. Los registros existentes se conservan. Para ver productos, clientes y pedidos a partir de una base nueva, puedes importarlos desde tu respaldo de MySQL o crearlos desde la aplicación.
 
 ## Autenticación y prueba en Postman
 

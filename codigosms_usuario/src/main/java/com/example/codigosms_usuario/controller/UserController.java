@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.codigosms_usuario.dto.AddressRequest;
+import com.example.codigosms_usuario.dto.AdminUserRequest;
 import com.example.codigosms_usuario.dto.AddressResponse;
 import com.example.codigosms_usuario.dto.AuthResponse;
 import com.example.codigosms_usuario.dto.LoginRequest;
@@ -102,6 +103,13 @@ public class UserController {
     public ResponseEntity<UserResponse> updateProfile(@PathVariable Long id,
                                                       @Valid @RequestBody UserRequest dto) {
         return ResponseEntity.ok(toResponse(service.updateProfile(id, dto)));
+    }
+
+    @PutMapping("/{id}/administracion")
+    public UserResponse updateFromAdmin(@PathVariable Long id,
+            @RequestAttribute("huellitasIdentity") JwtService.Identity identity,
+            @Valid @RequestBody AdminUserRequest dto) {
+        return toResponse(service.updateFromAdmin(id, identity.userId(), dto));
     }
 
     @PutMapping("/{id}/password")

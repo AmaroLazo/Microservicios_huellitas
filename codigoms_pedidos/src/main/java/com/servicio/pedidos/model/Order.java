@@ -41,6 +41,10 @@ public class Order {
     @Column(name = "seed_key", unique = true, length = 120)
     private String seedKey;
 
+    // La clave incorpora el ID del usuario para que cada cuenta tenga sus propios intentos.
+    @Column(name = "creation_key", unique = true, length = 56)
+    private String creationKey;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private OrderStatus status = OrderStatus.PENDIENTE;

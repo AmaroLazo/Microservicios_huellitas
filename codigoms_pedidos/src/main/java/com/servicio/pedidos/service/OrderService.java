@@ -3,6 +3,7 @@ package com.servicio.pedidos.service;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.data.domain.Page;
@@ -37,6 +38,10 @@ public class OrderService {
     /** Crea un pedido con el precio y la disponibilidad obtenidos del catálogo y reserva el stock. */
     @Transactional
     public Order createFromCart(CreateOrderDTO dto) {
+        if (dto.getCreationKey() != null) {
+            var existing = findByAttempt(dto.getUserId(), dto.getCreationKey());
+            if (existing.isPresent()) return existing.get();
+        }
         List<CatalogProductResponse> products = new ArrayList<>();
         for (OrderItemDTO item : dto.getItems()) {
             validateItem(item.getQuantity(), item.getProductId());
@@ -47,6 +52,9 @@ public class OrderService {
 
         Order order = new Order();
         order.setUserId(dto.getUserId());
+        if (dto.getCreationKey() != null) {
+            order.setCreationKey(dto.getUserId() + ":" + dto.getCreationKey());
+        }
         order.setShippingAddress(new ShippingAddress(
                 dto.getShippingAddress().getStreet().trim(), dto.getShippingAddress().getCity().trim(),
                 dto.getShippingAddress().getHouseNumber(), dto.getShippingAddress().getRegion(),
@@ -59,7 +67,8 @@ public class OrderService {
             order.getItems().add(item);
         }
         recalculateTotal(order);
-        Order saved = orderRepository.save(order);
+        // La restricción única decide qué petición puede reservar stock antes de llamar a Catálogo.
+        Order saved = orderRepository.saveAndFlush(order);
 
         List<ReservedStock> reserved = new ArrayList<>();
         try {
@@ -74,6 +83,11 @@ public class OrderService {
 
         log.info("Pedido creado id={} para usuario {}", saved.getId(), saved.getUserId());
         return saved;
+    }
+
+    @Transactional(readOnly = true)
+    public Optional<Order> findByAttempt(Long userId, String key) {
+        return orderRepository.findByCreationKey(userId + ":" + key);
     }
 
     @Transactional(readOnly = true)

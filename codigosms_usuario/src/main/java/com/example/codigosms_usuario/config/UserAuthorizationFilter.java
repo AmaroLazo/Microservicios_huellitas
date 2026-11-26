@@ -90,7 +90,7 @@ public class UserAuthorizationFilter extends OncePerRequestFilter {
             return !admin || path.endsWith("/password");
         }
         if (path.equals(own + "/role") || path.equals(own + "/toggle-status")) return false;
-        if (path.matches("/api/users/[0-9]+/(role|toggle-status)")) return admin;
+        if (path.matches("/api/users/[0-9]+/(role|toggle-status|administracion)")) return admin;
         if (path.matches("/api/users/[0-9]+(/addresses(/[0-9]+)?)?")) {
             return admin || path.equals(own) || path.startsWith(own + "/addresses");
         }

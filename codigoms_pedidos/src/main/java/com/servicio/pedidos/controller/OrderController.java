@@ -1,6 +1,7 @@
 package com.servicio.pedidos.controller;
 
 import java.util.List;
+import org.springframework.dao.DataIntegrityViolationException;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -40,7 +41,22 @@ public class OrderController {
     public ResponseEntity<OrderResponse> createOrder(@Valid @RequestBody CreateOrderDTO dto,
             @RequestAttribute("huellitasUserId") Long userId) {
         if (!userId.equals(dto.getUserId())) return ResponseEntity.status(403).build();
-        return ResponseEntity.status(201).body(toResponse(orderService.createFromCart(dto)));
+        try {
+            return ResponseEntity.status(201).body(toResponse(orderService.createFromCart(dto)));
+        } catch (DataIntegrityViolationException error) {
+            if (dto.getCreationKey() == null) throw error;
+            return orderService.findByAttempt(userId, dto.getCreationKey())
+                    .map(order -> ResponseEntity.ok(toResponse(order)))
+                    .orElseThrow(() -> error);
+        }
+    }
+
+    @GetMapping("/intentos/{key}")
+    public ResponseEntity<OrderResponse> getByAttempt(@PathVariable String key,
+            @RequestAttribute("huellitasUserId") Long userId) {
+        return orderService.findByAttempt(userId, key)
+                .map(order -> ResponseEntity.ok(toResponse(order)))
+                .orElseGet(() -> ResponseEntity.noContent().build());
     }
 
     @GetMapping("/{id}")
